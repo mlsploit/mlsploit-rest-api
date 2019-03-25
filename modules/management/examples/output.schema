@@ -1,0 +1,19 @@
+{
+    "functions": [
+        {
+            "name": "...",
+            "tags": [
+                {
+                    "name": "ftype",
+                    "type": "str"
+                },
+                {
+                    "name": "pred_label",
+                    "type": "str"
+                }
+            ],
+            "files_modified": true,
+            "files_extra": false
+        }
+    ]
+}

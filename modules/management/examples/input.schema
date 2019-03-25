@@ -1,0 +1,46 @@
+{
+    "functions": [
+        {
+            "name": "...",
+            "options": [
+                {
+                    "name": "...", 
+                    "type": "str", 
+                    "required": true
+                },
+                {
+                    "name": "...", 
+                    "type": "int", 
+                    "required": true
+                },
+                {
+                    "name": "...", 
+                    "type": "enum", 
+                    "required": true,
+                    "values":[
+                        "...",
+                        "..."
+                    ] 
+                }
+            ],
+            "extensions": [
+                {
+                    "ftype": "input",
+                    "extension": "pdf"
+                },
+                {
+                    "ftype": "output",
+                    "extension": "pdf"
+                },
+                {
+                    "ftype": "model",
+                    "extension": "zip"
+                },
+                {
+                    "ftype": null,
+                    "extension": "pdf"
+                }
+            ]
+        }
+    ]
+}

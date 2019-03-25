@@ -1,0 +1,13 @@
+.venv
+Pipfile
+Pipfile.lock
+
+*__pycache__
+*.pyc
+
+db.sqlite3
+
+*/migrations/*.py
+!*/migrations/__init__.py
+
+.scratch

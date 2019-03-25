@@ -1,0 +1,9 @@
+coreapi==2.3.3
+django==2.1.5
+django-allauth==0.38.0
+django-cors-headers==2.5.0
+djangorestframework==3.9.1
+django-rest-auth==0.9.3
+django-filter==2.1.0
+gitpython==2.1.11
+markdown==3.0.1
