@@ -101,6 +101,12 @@ the `MLSPLOIT_API_ADMIN_TOKEN` environment variable of the backend execution ser
 $ bash docker-manage-api.sh createmodule helloworld https://github.com/mlsploit/module-helloworld.git
 ```
 
+### Remove modules
+
+```bash
+$ bash docker-manage-api.sh removemodule helloworld
+```
+
 ### Start the API server
 
 ```bash
@@ -145,6 +151,12 @@ $ python manage.py drf_create_token admin
 
 ```bash
 $ python manage.py createmodule helloworld https://github.com/mlsploit/module-helloworld.git
+```
+
+### Remove modules
+
+```bash
+$ python manage.py removemodule helloworld
 ```
 
 ### Start the API server
