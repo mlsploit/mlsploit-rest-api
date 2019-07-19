@@ -25,8 +25,14 @@ class FileSerializer(OwnedHyperlinkedModelSerializer):
                             'modified_versions',
                             'date_uploaded')
 
+    def __init__(self, *args, **kwargs):
+        """If file is being updated don't allow blob to be changed."""
+        super().__init__(*args, **kwargs)
+
+        if self.instance is not None:
+            self.fields.pop('blob')  # remove the field
+
     def make_blob_url(self, obj):
-        print(MEDIA_DIR, obj.blob.path)
         blob_url = os.path.relpath(obj.blob.path, MEDIA_DIR)
 
         if 'request' in self.context:
