@@ -1,3 +1,4 @@
+import json
 import os
 
 from rest_framework.serializers import FileField, \
@@ -55,6 +56,19 @@ class FileSerializer(OwnedHyperlinkedModelSerializer):
                 f'for {current_user.username}.')
 
         return value
+
+    def validate_tags(self, value):
+        if not value:
+            value = "{}"
+
+        try:
+            json.loads(value)
+        except json.decoder.JSONDecodeError:
+            raise ValidationError('Unable to decode.')
+
+        return value
+
+
 
 
 class ForAdminFileSerializer(FileSerializer):
