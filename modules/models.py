@@ -26,6 +26,7 @@ class Function(models.Model):
     name = models.CharField(max_length=100, unique=True)
     module = models.ForeignKey(Module, related_name='functions',
                                on_delete=models.CASCADE)
+    doctxt = models.TextField(default='')
     options = models.TextField(default='[]')
 
     def __str__(self):

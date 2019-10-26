@@ -10,7 +10,7 @@ from modules.models import Function, Module
 class FunctionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Function
-        fields = ('id', 'url', 'name', 'module', 'options')
+        fields = ('id', 'url', 'name', 'module', 'doctxt', 'options')
 
     def validate_options(self, value):
         try:
@@ -29,7 +29,7 @@ class FunctionSerializer(HyperlinkedModelSerializer):
 class ChildFunctionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Function
-        fields = ('id', 'url', 'name', 'options')
+        fields = ('id', 'url', 'name', 'doctxt', 'options')
 
 
 class ModuleSerializer(HyperlinkedModelSerializer):
