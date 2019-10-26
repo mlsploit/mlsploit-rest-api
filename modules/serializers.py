@@ -37,7 +37,10 @@ class ModuleSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Module
-        fields = ('id', 'url', 'name', 'repo', 'functions',
+        fields = ('id', 'url',
+                  'name', 'repo',
+                  'functions',
+                  'doctxt', 'tagline',
                   'input_schema', 'output_schema')
         read_only_fields = ('functions',)
 

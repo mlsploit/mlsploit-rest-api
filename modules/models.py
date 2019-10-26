@@ -8,6 +8,8 @@ from django.dispatch import receiver
 class Module(models.Model):
     name = models.CharField(max_length=100, unique=True)
     repo = models.CharField(max_length=200, unique=True, blank=False, null=False)
+    doctxt = models.TextField(default='')
+    tagline = models.TextField(default='')
     input_schema = models.TextField(default='{}')
     output_schema = models.TextField(default='{}')
 
