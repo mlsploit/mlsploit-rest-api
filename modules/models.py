@@ -47,4 +47,5 @@ def create_functions(sender, instance, **kwargs):
         Function.objects.create(
             name=fn['name'],
             module=module,
+            doctxt=fn.get('doctxt', ''),
             options=json.dumps(fn.get('options', [])))
