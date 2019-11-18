@@ -14,8 +14,8 @@ class JobViewSet(OwnedModelViewSet):
     serializer_class = JobSerializer
     filter_fields = ('run', 'status')
     http_method_names = ['get', 'put', 'patch', 'options', 'head']
-    permission_classes = OwnedModelViewSet.permission_classes \
-                         + (IsAdminOrSafeMethodPermission,)
+    # permission_classes = OwnedModelViewSet.permission_classes \
+    #                      + (IsAdminOrSafeMethodPermission,)
 
 
 class RunViewSet(OwnedModelViewSet):
