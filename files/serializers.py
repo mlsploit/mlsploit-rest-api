@@ -20,8 +20,7 @@ class FileSerializer(OwnedHyperlinkedModelSerializer):
                   'tags', 'parent_file',
                   'modified_versions',
                   'date_uploaded')
-        read_only_fields = ('owner', 'kind',
-                            'parent_file',
+        read_only_fields = ('owner',
                             'modified_versions',
                             'date_uploaded')
 
