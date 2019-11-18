@@ -53,7 +53,8 @@ class FileSerializer(OwnedHyperlinkedModelSerializer):
         filename = value.name
 
         existing_files_for_user = File.objects.filter(
-            owner__id=current_user.id, name=filename)
+            owner__id=current_user.id, name=filename,
+            kind=File.FileKind.INPUT)
 
         if len(existing_files_for_user) > 0:
             raise ValidationError(
