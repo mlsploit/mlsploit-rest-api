@@ -115,3 +115,6 @@ venv.bak/
 .venv
 Pipfile
 Pipfile.lock
+
+# IDE files
+.idea/
