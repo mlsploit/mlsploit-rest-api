@@ -1,3 +1,5 @@
+<img width="250" src="https://mlsploit.github.io/static/img/mlsploit-logo.png">
+
 # MLsploit REST API
 
 The MLsploit REST API service manages the data storage and retrieval 
