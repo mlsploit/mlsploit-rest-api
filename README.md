@@ -1,4 +1,4 @@
-<img width="250" src="https://mlsploit.github.io/static/img/mlsploit-logo.png">
+<img width="180" align="right" src="https://mlsploit.github.io/static/img/mlsploit-logo.png">
 
 # MLsploit REST API
 
