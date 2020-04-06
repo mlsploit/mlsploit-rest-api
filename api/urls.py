@@ -27,24 +27,19 @@ from users.views import UserViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'modules', ModuleViewSet)
-router.register(r'functions', FunctionViewSet)
-router.register(r'users', UserViewSet, basename='user')
-router.register(r'files', FileViewSet, basename='file')
-router.register(r'pipelines', PipelineViewSet, basename='pipeline')
-router.register(r'tasks', TaskViewSet, basename='task')
-router.register(r'runs', RunViewSet, basename='run')
-router.register(r'jobs', JobViewSet, basename='job')
+router.register(r"modules", ModuleViewSet)
+router.register(r"functions", FunctionViewSet)
+router.register(r"users", UserViewSet, basename="user")
+router.register(r"files", FileViewSet, basename="file")
+router.register(r"pipelines", PipelineViewSet, basename="pipeline")
+router.register(r"tasks", TaskViewSet, basename="task")
+router.register(r"runs", RunViewSet, basename="run")
+router.register(r"jobs", JobViewSet, basename="job")
 
 urlpatterns = [
-
-    url(r'^admin/', admin.site.urls),
-
-    url(r'^auth/', include('rest_auth.urls')),
-    url(r'^auth/registration/', include('rest_auth.registration.urls')),
-
-    url(r'^api/v1/', include(router.urls)),
-
-    url(r'^docs/', include_docs_urls(title='MLsploit API')),
-
+    url(r"^admin/", admin.site.urls),
+    url(r"^auth/", include("rest_auth.urls")),
+    url(r"^auth/registration/", include("rest_auth.registration.urls")),
+    url(r"^api/v1/", include(router.urls)),
+    url(r"^docs/", include_docs_urls(title="MLsploit API")),
 ] + static(MEDIA_URL, document_root=MEDIA_DIR)

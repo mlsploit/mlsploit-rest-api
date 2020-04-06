@@ -1,8 +1,7 @@
 import json
 from json import JSONDecodeError
 
-from rest_framework.serializers import HyperlinkedModelSerializer, \
-    ValidationError
+from rest_framework.serializers import HyperlinkedModelSerializer, ValidationError
 
 from modules.models import Function, Module
 
@@ -10,18 +9,18 @@ from modules.models import Function, Module
 class FunctionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Function
-        fields = ('id', 'url', 'name', 'module', 'doctxt', 'options')
+        fields = ("id", "url", "name", "module", "doctxt", "options")
 
     def validate_options(self, value):
         try:
             json.loads(value)
         except JSONDecodeError:
-            raise ValidationError('Not a valid JSON text.')
+            raise ValidationError("Not a valid JSON text.")
 
         try:
             assert type(json.loads(value)) is list
         except AssertionError:
-            raise ValidationError('Should be a list.')
+            raise ValidationError("Should be a list.")
 
         return value
 
@@ -29,7 +28,7 @@ class FunctionSerializer(HyperlinkedModelSerializer):
 class ChildFunctionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Function
-        fields = ('id', 'url', 'name', 'doctxt', 'options')
+        fields = ("id", "url", "name", "doctxt", "options")
 
 
 class ModuleSerializer(HyperlinkedModelSerializer):
@@ -37,18 +36,24 @@ class ModuleSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Module
-        fields = ('id', 'url',
-                  'name', 'repo',
-                  'functions',
-                  'doctxt', 'tagline',
-                  'input_schema', 'output_schema')
-        read_only_fields = ('functions',)
+        fields = (
+            "id",
+            "url",
+            "name",
+            "repo",
+            "functions",
+            "doctxt",
+            "tagline",
+            "input_schema",
+            "output_schema",
+        )
+        read_only_fields = ("functions",)
 
     def validate_input_schema(self, value):
         try:
             json.loads(value)
         except JSONDecodeError:
-            raise ValidationError('Not a valid JSON text.')
+            raise ValidationError("Not a valid JSON text.")
 
         return value
 

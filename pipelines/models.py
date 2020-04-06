@@ -12,30 +12,33 @@ from users.models import User
 
 class Pipeline(models.Model):
     name = models.CharField(blank=False, max_length=100)
-    owner = models.ForeignKey(User, related_name='pipelines',
-                              on_delete=models.CASCADE, editable=False)
+    owner = models.ForeignKey(
+        User, related_name="pipelines", on_delete=models.CASCADE, editable=False
+    )
     enabled = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
-        return f'{self.__class__.__name__}[{self.name}]'
+        return f"{self.__class__.__name__}[{self.name}]"
 
 
 class Task(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
-    pipeline = models.ForeignKey(Pipeline, blank=False, related_name='tasks',
-                                 on_delete=models.CASCADE)
-    function = models.ForeignKey(Function, blank=False, null=True,
-                                 on_delete=models.SET_NULL)
-    arguments = models.TextField(default='{}', blank=False, null=False)
+    pipeline = models.ForeignKey(
+        Pipeline, blank=False, related_name="tasks", on_delete=models.CASCADE
+    )
+    function = models.ForeignKey(
+        Function, blank=False, null=True, on_delete=models.SET_NULL
+    )
+    arguments = models.TextField(default="{}", blank=False, null=False)
     order = models.IntegerField(default=1, editable=False)
     date_created = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        ordering = ('order',)
+        ordering = ("order",)
 
     def __str__(self):
-        return f'{self.__class__.__name__}[{self.function.name}]'
+        return f"{self.__class__.__name__}[{self.function.name}]"
 
     def save(self, *args, **kwargs):
         order = self.pipeline.tasks.count() + 1
@@ -46,34 +49,40 @@ class Task(models.Model):
 
 class Run(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
-    pipeline = models.ForeignKey(Pipeline, blank=False, related_name='runs',
-                                 on_delete=models.CASCADE)
+    pipeline = models.ForeignKey(
+        Pipeline, blank=False, related_name="runs", on_delete=models.CASCADE
+    )
     files = models.ManyToManyField(File, blank=False)
     date_created = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
-        return f'{self.__class__.__name__}[{self.pipeline.name}]'
+        return f"{self.__class__.__name__}[{self.pipeline.name}]"
 
 
 class Job(models.Model):
     class JobStatus(Enum):
-        PENDING = 'PENDING'
-        QUEUED = 'QUEUED'
-        RUNNING = 'RUNNING'
-        FAILED = 'FAILED'
-        FINISHED = 'FINISHED'
+        PENDING = "PENDING"
+        QUEUED = "QUEUED"
+        RUNNING = "RUNNING"
+        FAILED = "FAILED"
+        FINISHED = "FINISHED"
 
         @classmethod
         def choices(cls):
             return tuple((i.name, i.value) for i in cls)
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
-    run = models.ForeignKey(Run, blank=False, related_name='jobs',
-                            on_delete=models.CASCADE)
+    run = models.ForeignKey(
+        Run, blank=False, related_name="jobs", on_delete=models.CASCADE
+    )
     task = models.ForeignKey(Task, blank=False, on_delete=models.CASCADE)
-    parent_job = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-    status = models.CharField(max_length=100, choices=JobStatus.choices(),
-                              default=JobStatus.PENDING.value, blank=False)
+    parent_job = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
+    status = models.CharField(
+        max_length=100,
+        choices=JobStatus.choices(),
+        default=JobStatus.PENDING.value,
+        blank=False,
+    )
     output = models.TextField(blank=True, null=True)
     output_files = models.ManyToManyField(File, blank=True)
     logs = models.TextField(blank=True, null=True)
@@ -94,10 +103,8 @@ def create_jobs(sender, instance, **kwargs):
 
     for task in tasks:
         parent_job = Job.objects.create(
-            owner=owner,
-            task=task,
-            run=run,
-            parent_job=parent_job)
+            owner=owner, task=task, run=run, parent_job=parent_job
+        )
 
 
 @receiver(pre_delete, sender=Job)

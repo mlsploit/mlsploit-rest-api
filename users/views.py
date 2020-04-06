@@ -43,12 +43,13 @@ class UserViewSet(ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
+
     serializer_class = UserSerializer
-    http_method_names = ['get', 'put', 'patch', 'delete', 'options', 'head']
+    http_method_names = ["get", "put", "patch", "delete", "options", "head"]
 
     def get_queryset(self):
         current_user = _get_user(self.request)
-        all_users = User.objects.all().order_by('-date_joined')
+        all_users = User.objects.all().order_by("-date_joined")
 
         if current_user.is_staff:
             return all_users

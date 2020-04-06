@@ -24,11 +24,13 @@ class FileViewSet(OwnedModelViewSet):
     The file cannot be deleted if it is associated with any run
     (user will have to delete the associated runs first).
     """
+
     queryset_class = File
-    queryset_ordered_by = '-date_uploaded'
-    filter_fields = ('owner', 'kind')
-    permission_classes = OwnedModelViewSet.permission_classes \
-                         + (CanDeleteFilePermission,)
+    queryset_ordered_by = "-date_uploaded"
+    filter_fields = ("owner", "kind")
+    permission_classes = OwnedModelViewSet.permission_classes + (
+        CanDeleteFilePermission,
+    )
 
     def get_serializer_class(self):
         if self.request and self.request.user.is_staff:
