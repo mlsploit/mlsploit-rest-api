@@ -13,12 +13,12 @@ class ModuleViewSet(ModelViewSet):
     queryset = Module.objects.all().order_by("-id")
     serializer_class = ModuleSerializer
     permission_classes = (IsAdminOrSafeMethodPermission,)
-    http_method_names = ["get", "post", "delete", "options", "head"]
+    http_method_names = ["get", "delete", "options", "head"]
 
 
 class FunctionViewSet(ModelViewSet):
     """
-    API endpoint that allows functions to be viewed or edited.
+    API endpoint that allows functions to be viewed.
     """
 
     queryset = Function.objects.all().order_by("-id")

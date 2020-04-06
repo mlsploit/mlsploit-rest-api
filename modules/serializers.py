@@ -3,32 +3,64 @@ from json import JSONDecodeError
 
 from rest_framework.serializers import HyperlinkedModelSerializer, ValidationError
 
+from mlsploit import Module as ModuleConfig
+from mlsploit.core.module import Option as OptionConfig, Tag as TagConfig
+
 from modules.models import Function, Module
 
 
 class FunctionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Function
-        fields = ("id", "url", "name", "module", "doctxt", "options")
+        fields = (
+            "id",
+            "url",
+            "name",
+            "module",
+            "doctxt",
+            "options",
+            "creates_new_files",
+            "modifies_input_files",
+            "expected_filetype",
+            "optional_filetypes",
+            "output_tags",
+        )
 
     def validate_options(self, value):
-        try:
-            json.loads(value)
-        except JSONDecodeError:
-            raise ValidationError("Not a valid JSON text.")
+        raw_options = json.loads(value)
+        valid_options = map(lambda d: OptionConfig(**d), raw_options)
+        valid_options = map(lambda o: o.dict(), valid_options)
+        return json.dumps(list(valid_options))
 
-        try:
-            assert type(json.loads(value)) is list
-        except AssertionError:
-            raise ValidationError("Should be a list.")
+    def validate_optional_filetypes(self, value):
+        value = json.loads(value)
+        if not isinstance(value, list):
+            raise ValidationError("Should be a list")
+        return json.dumps(value)
 
-        return value
+    def validate_output_tags(self, value):
+        raw_tags = json.loads(value)
+        valid_tags = map(lambda d: TagConfig(**d), raw_tags)
+        valid_tags = map(lambda t: t.dict(), valid_tags)
+        return json.dumps(list(valid_tags))
 
 
 class ChildFunctionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Function
-        fields = ("id", "url", "name", "doctxt", "options")
+        fields = (
+            "id",
+            "url",
+            "name",
+            "module",
+            "doctxt",
+            "options",
+            "creates_new_files",
+            "modifies_input_files",
+            "expected_filetype",
+            "optional_filetypes",
+            "output_tags",
+        )
 
 
 class ModuleSerializer(HyperlinkedModelSerializer):
@@ -42,20 +74,14 @@ class ModuleSerializer(HyperlinkedModelSerializer):
             "name",
             "repo",
             "functions",
-            "doctxt",
+            "display_name",
             "tagline",
-            "input_schema",
-            "output_schema",
+            "doctxt",
+            "config",
+            "icon_url",
         )
         read_only_fields = ("functions",)
 
-    def validate_input_schema(self, value):
-        try:
-            json.loads(value)
-        except JSONDecodeError:
-            raise ValidationError("Not a valid JSON text.")
-
-        return value
-
-    def validate_output_schema(self, value):
-        return self.validate_input_schema(value)
+    def validate_config(self, value):
+        valid_config = ModuleConfig.deserialize(value)
+        return valid_config.serialize()

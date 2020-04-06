@@ -5,5 +5,6 @@ django-cors-headers==2.5.0
 djangorestframework==3.9.1
 django-rest-auth==0.9.3
 django-filter==2.1.0
-gitpython==2.1.11
+gitpython==3.1.0
 markdown==3.0.1
+mlsploit-py>=0.1.1

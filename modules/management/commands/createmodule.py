@@ -7,6 +7,9 @@ import tempfile
 from django.core.management.base import BaseCommand
 from git import Git
 
+from mlsploit import Module as ModuleConfig
+from mlsploit.paths import ModulePaths
+
 from modules.models import Module
 
 
@@ -27,27 +30,20 @@ class Command(BaseCommand):
 
         tmp_dir = tempfile.mkdtemp()
 
-        try:
-            Git(tmp_dir).clone(repo)
-            repo_dir = glob.glob(os.path.join(tmp_dir, "*"))[0]
+        Git(tmp_dir).clone(repo)
+        repo_dir = glob.glob(os.path.join(tmp_dir, "*"))[0]
 
-            input_schema = open(os.path.join(repo_dir, "input.schema"), "r").read()
-            output_schema = open(os.path.join(repo_dir, "output.schema"), "r").read()
+        ModulePaths.set_module_dir(repo_dir)
+        module_config = ModuleConfig.load()
 
-            input_schema_dict = json.loads(input_schema)
-            doctxt = input_schema_dict.get("doctxt", "")
-            tagline = input_schema_dict.get("tagline", "")
-
-            Module.objects.create(
-                name=name,
-                repo=repo,
-                doctxt=doctxt,
-                tagline=tagline,
-                input_schema=input_schema,
-                output_schema=output_schema,
-            )
-
-        except Exception as e:
-            print(f"[ERROR] {e}")
+        Module.objects.create(
+            name=name,
+            repo=repo,
+            display_name=module_config.display_name,
+            tagline=module_config.tagline,
+            doctxt=module_config.doctxt,
+            config=module_config.serialize(),
+            icon_url=module_config.icon_url or "",
+        )
 
         shutil.rmtree(tmp_dir)
