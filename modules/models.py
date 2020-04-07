@@ -10,7 +10,8 @@ from mlsploit.core.module import Option as OptionConfig, Tag as TagConfig
 
 class Module(models.Model):
     name = models.CharField(max_length=25, unique=True)
-    repo = models.CharField(max_length=200, unique=True)
+    repo_url = models.CharField(max_length=200, unique=True)
+    repo_branch = models.CharField(max_length=50, default="master")
     display_name = models.CharField(max_length=25, unique=True)
     tagline = models.CharField(max_length=50)
     doctxt = models.TextField()

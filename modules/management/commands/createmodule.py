@@ -5,7 +5,7 @@ import shutil
 import tempfile
 
 from django.core.management.base import BaseCommand
-from git import Git
+import git
 
 from mlsploit import Module as ModuleConfig
 from mlsploit.paths import ModulePaths
@@ -19,26 +19,31 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("name", type=str, help="Name of the module to be created")
         parser.add_argument(
-            "repo", type=str, help="Link to git repository containing the module"
+            "repo_url", type=str, help="Link to git repository containing the module"
+        )
+        parser.add_argument(
+            "-b", "--branch", type=str, default="master", help="Branch to be cloned"
         )
 
     def handle(self, *args, **kwargs):
         name = kwargs["name"]
-        repo = kwargs["repo"]
+        repo_url = kwargs["repo_url"]
+        repo_branch = kwargs["branch"]
 
-        assert repo.endswith(".git"), '"repo" should end with .git'
+        assert repo_url.endswith(".git"), '"repo_url" should end with .git'
 
-        tmp_dir = tempfile.mkdtemp()
+        repo_dir = tempfile.mkdtemp()
 
-        Git(tmp_dir).clone(repo)
-        repo_dir = glob.glob(os.path.join(tmp_dir, "*"))[0]
+        print(f"Cloning branch {repo_branch} from {repo_url}...")
+        git.Repo.clone_from(repo_url, repo_dir, branch=repo_branch)
 
         ModulePaths.set_module_dir(repo_dir)
         module_config = ModuleConfig.load()
 
         Module.objects.create(
             name=name,
-            repo=repo,
+            repo_url=repo_url,
+            repo_branch=repo_branch,
             display_name=module_config.display_name,
             tagline=module_config.tagline,
             doctxt=module_config.doctxt,
@@ -46,4 +51,4 @@ class Command(BaseCommand):
             icon_url=module_config.icon_url or "",
         )
 
-        shutil.rmtree(tmp_dir)
+        shutil.rmtree(repo_dir)
