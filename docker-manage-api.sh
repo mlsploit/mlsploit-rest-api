@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-docker-compose \
-    -f services.docker-compose.yml \
-    run -v "$(pwd)":/app \
-    mlsploit-api-service $@
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd -P)"
+
+docker-compose run mlsploit-api-service $@

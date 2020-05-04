@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
-set -a && . .env && set +a
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd -P)"
 
-docker-compose -f services.docker-compose.yml up
+./docker-manage-api.sh makemigrations > /dev/null
+./docker-manage-api.sh migrate > /dev/null
+
+docker-compose up
