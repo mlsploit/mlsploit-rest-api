@@ -16,6 +16,9 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SCRATCH_DIR = os.path.join(BASE_DIR, ".scratch")
+os.makedirs(SCRATCH_DIR, exist_ok=True)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -23,17 +26,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("MLSPLOIT_API_SECRET_KEY")
 assert (
-    SECRET_KEY is not None
+    SECRET_KEY and len(SECRET_KEY) >= 25
 ), """
-    MLSPLOIT_API_SECRET_KEY environment variable not found.
+    MLSPLOIT_API_SECRET_KEY environment variable not found or too short (min length: 25).
+
+    If running via entrypoint.sh, then set it in the .env file, otherwise run the following command:
     $ export MLSPLOIT_API_SECRET_KEY='e(@0oj#c9u=qva@g&)*(rx7m9_vf!!h!#b(sg(%nr2rk+p)+v1'
-    
-    SECURITY WARNING: This is an example secret key, keep the secret key used in production secret.
+
+    SECURITY WARNING: This is an example secret key, keep the secret key used in production a secret.
     """
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("MLSPLOIT_API_DEBUG_MODE") == "true"
 
 ALLOWED_HOSTS = os.getenv("MLSPLOIT_API_ALLOWED_HOSTS")
 if ALLOWED_HOSTS is None:
@@ -105,16 +110,10 @@ WSGI_APPLICATION = "api.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DB_PATH = os.getenv("MLSPLOIT_API_DB_PATH")
-assert (
-    DB_PATH is not None
-), """
-    MLSPLOIT_API_DB_PATH environment variable not found.
-    $ export MLSPLOIT_API_DB_PATH='/path/to/db.sqlite3'
-    """
+DB_PATH = os.path.join(SCRATCH_DIR, "data", "db.sqlite3")
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": DB_PATH,}}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": DB_PATH}}
 
 
 # Password validation
@@ -134,13 +133,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -171,11 +166,5 @@ OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
 
 MEDIA_URL = "/media/"
-MEDIA_DIR = os.getenv("MLSPLOIT_API_MEDIA_DIR")
-assert (
-    MEDIA_DIR is not None
-), """
-    MLSPLOIT_API_MEDIA_DIR environment variable not found.
-    $ export MLSPLOIT_API_MEDIA_DIR='/path/to/media_dir'
-    """
+MEDIA_DIR = os.path.join(SCRATCH_DIR, "media")
 os.makedirs(MEDIA_DIR, exist_ok=True)

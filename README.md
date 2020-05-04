@@ -47,16 +47,10 @@ to quickly generate a secret key.
 Here is a short description of the environment variables:
 - `MLSPLOIT_API_SECRET_KEY` is the key that is used by Django 
   to securely store and exchange data.
-- `MLSPLOIT_API_ALLOWED_HOSTS` is the comma-separated list of IP addresses 
+- `MLSPLOIT_API_DEBUG_MODE` is a flag that sets whether Django should be run in
+  debug mode or not. This is set to "true" by default. Unset this value in production.
+- `MLSPLOIT_API_ALLOWED_HOSTS` is the comma-separated list of IP addresses
   that are allowed to access the REST API. All IP addresses are allowed by default.
-- `MLSPLOIT_API_SCRATCH_DIR` is the path to a "scratch" directory where 
-  the REST API stores required artifacts generated during execution.
-- `MLSPLOIT_API_DB_PATH` is the path to the SQLite3 database file 
-  that the REST API uses for storing all the data. 
-  It is created inside the scratch directory by default.
-- `MLSPLOIT_API_MEDIA_DIR` is the path to a directory where 
-  all the files uploaded by the users are stored. 
-  It is also created inside the scratch directory by default.
 
 ## Docker Setup
 
