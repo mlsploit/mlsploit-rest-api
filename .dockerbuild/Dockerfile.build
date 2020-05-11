@@ -1,0 +1,15 @@
+FROM python:3.6-alpine
+
+VOLUME /host
+
+RUN apk upgrade --no-cache \
+    && apk add --no-cache --update git \
+    && apk add --no-cache --update curl gcc g++ \
+    && ln -s /usr/include/locale.h /usr/include/xlocale.h \
+    && pip install --upgrade pip
+
+COPY requirements.txt /requirements.txt
+RUN pip wheel --wheel-dir=/wheelhouse -r /requirements.txt \
+    && tar -cvzf /wheelhouse.tar.gz /wheelhouse/*
+
+CMD ["cp", "/wheelhouse.tar.gz", "/host"]
