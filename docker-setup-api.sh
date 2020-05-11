@@ -20,6 +20,7 @@ function usage() {
     echo "         This will also create a password-less admin user."
     echo "         To set the admin password, run './docker-manage-api.sh changepassword admin'."
     echo "    p    Setup in production mode (disables Django DEBUG flag)."
+    echo "    t    Create a test user (username: testuser, password: testpassword)"
     echo "    h    Show this message."
     echo
     echo "This is a helper script to set up the MLsploit REST API Docker service."
@@ -44,13 +45,17 @@ function createadminuser() {
 
 AUTO_MODE="false"
 SET_PROD="false"
-while getopts ":aph" OPTKEY; do
+CREATE_TESTUSER="false"
+while getopts ":apth" OPTKEY; do
     case $OPTKEY in
         a )
             AUTO_MODE="true"
             ;;
         p )
             SET_PROD="true"
+            ;;
+        t )
+            CREATE_TESTUSER="true"
             ;;
         h )
             usage
@@ -93,4 +98,9 @@ log "Generating token for user 'admin'..."
 if [[ $SET_PROD == "true" ]]; then
     update_env MLSPLOIT_API_DEBUG_MODE "false"
     log "Disabled debug mode"
+fi
+
+if [[ $CREATE_TESTUSER == "true" ]]; then
+    log "Creating test user"
+    ./docker-manage-api.sh createuser
 fi
