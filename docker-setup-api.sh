@@ -101,6 +101,15 @@ if [[ $SET_PROD == "true" ]]; then
 fi
 
 if [[ $CREATE_TESTUSER == "true" ]]; then
-    log "Creating test user"
-    ./docker-manage-api.sh createuser
+    ./docker-manage-api.sh checkuserexists testuser \
+        || (log "Creating test user..." && ./docker-manage-api.sh createuser)
 fi
+
+OLD_IFS=$IFS
+if [[ -f modules.csv ]]; then
+    log "Adding modules..."
+    while IFS=, read -r NAME REPO BRANCH; do
+        ./docker-manage-api.sh createmodule $NAME $REPO -b $BRANCH || log "Failed to add module $NAME"
+    done < modules.csv
+fi
+IFS=$OLD_IFS

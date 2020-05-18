@@ -118,3 +118,6 @@ Pipfile.lock
 
 # IDE files
 .idea/
+
+# Modules file
+/modules.csv
