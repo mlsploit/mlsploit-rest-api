@@ -121,3 +121,6 @@ Pipfile.lock
 
 # Modules file
 /modules.csv
+
+# Admin token
+/.admintoken
