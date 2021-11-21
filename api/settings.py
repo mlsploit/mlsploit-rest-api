@@ -175,5 +175,7 @@ MEDIA_URL = "/media/"
 MEDIA_DIR = os.path.join(SCRATCH_DIR, "media")
 os.makedirs(MEDIA_DIR, exist_ok=True)
 
+FILE_UPLOAD_PERMISSIONS = 0o644
+
 if os.getenv("MLSPLOIT_HOSTING_SSL_ENABLED") == "true":
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
